@@ -1,0 +1,21 @@
+Package: ScrapeBotR
+Type: Package
+Title: Retrieve Data from a ScrapeBot Database
+Version: 0.1.0
+Authors@R:
+    person(given = 'Mario', 
+           family = 'Haim', 
+           email = 'mario@haim.it', 
+           role = c('aut', 'cre'))
+Description: ScrapeBotR (with "R") allows to easily retrieve (large amounts of) data from a ScrapeBot installation.
+    The package provides easy-to-use functions to read and export instances, recipes, runs, log information, and data. Thereby, the package plugs neatly into the tidyverse as it makes heavy use of tibbles.
+    The ScrapeBot (without "R") is a tool for so-called "agent-based testing" to automatically visit, modify, and scrape a defined set of webpages regularly. It was built to automate various web-based tasks and keep track of them in a controllable way for academic research, primarily in the realm of computational social science.
+License: GPL-2
+Encoding: UTF-8
+Imports:
+    DBI,
+    dplyr,
+    magrittr,
+    RMariaDB,
+    tibble
+RoxygenNote: 7.1.1
