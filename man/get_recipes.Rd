@@ -2,23 +2,31 @@
 % Please edit documentation in R/get_recipes.R
 \name{get_recipes}
 \alias{get_recipes}
-\title{Get a tibble of all recipes}
+\title{Get a tibble of available recipes}
 \usage{
 get_recipes(connection, instance_uid = NULL, include_inactive = FALSE)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 
-\item{include_inactive}{if true, inactive recipes are included along active recipes; defaults to `FALSE`}
+\item{instance_uid}{Numeric UID or a vector of numeric UIDs of the instance to filter recipes for. Filtering is inclusive (i.e., recipes are included if they are assigned to at least one of the instances; no need to be assigned to all of them to be returned). If NULL, all recipes are provided. Defaults to \code{NULL}.}
+
+\item{include_inactive}{If \code{TRUE}, inactive recipes are included along active recipes; defaults to \code{FALSE}.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all available recipes including its UID, name, the date then the recipe was first created, its description, whether the recipe is active, as well as the number of its runs and the date of the latest run
+A \link[tibble:tibble-package]{tibble} listing all available recipes including its UID, name, the date then the recipe was first created, its description, whether the recipe is active, as well as the number of its runs and the date of the latest run.
 }
 \description{
-Get a tibble of all recipes
+Default behavior is to just retrieve all active recipes, no matter on which instance they are running.
+You may change this behavior in two ways (or combinations thereof):
+\itemize{
+\item If \code{instance_uid} is set, only recipes assigned to at least one of these instances are returned.
+\item If \code{include_inactive} is set to \code{TRUE}, also recipes currently not active are returned.
+}
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_recipes(connection)
 get_recipes(connection, include_inactive = TRUE)
@@ -27,5 +35,5 @@ disconnect(connection)
 
 }
 \seealso{
-[get_recipe_steps()]
+\code{\link[=get_recipe_steps]{get_recipe_steps()}}
 }

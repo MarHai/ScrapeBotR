@@ -7,24 +7,26 @@
 get_run_log(connection, run_uid)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 
-\item{run_uid}{numeric UID of the run to find log entries for}
+\item{run_uid}{Numeric UID or a vector of numeric UIDs of the run to find log entries for.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all log entries including a timestamp, its type (one of: info, warning, error), and the message itself
+A \link[tibble:tibble-package]{tibble} listing all log entries including a timestamp, its type (one of: \code{info}, \code{warning}, \code{error}), and the message itself.
 }
 \description{
 Retrieve log entries for a provided run
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_run_log(connection, 13)
+get_run_log(connection, c(13, 99))
 disconnect(connection)
 }
 
 }
 \seealso{
-[get_runs()], [get_run_data()]
+\code{\link[=get_runs]{get_runs()}}, \code{\link[=get_run_data]{get_run_data()}}
 }

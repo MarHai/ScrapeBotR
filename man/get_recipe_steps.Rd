@@ -7,27 +7,33 @@
 get_recipe_steps(connection, recipe_uid, include_inactive = FALSE)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 
-\item{recipe_uid}{numeric UID of the recipe to retrieve steps for}
+\item{recipe_uid}{Numeric UID or a vector of numeric UIDs of the recipe to retrieve steps for.}
 
-\item{include_inactive}{if true, inactive recipes are included along active recipes; defaults to `FALSE`}
+\item{include_inactive}{If \code{TRUE}, inactive recipes are included along active recipes; defaults to \code{FALSE}.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all recipe steps including their UID, type, value (if necessary; depending on type), whether the step builds on a randomly picked item, whether the step builds on previously collected data, whether it is active, as well as a character vector of random items to choose from (if `use_random_item`)
+A \link[tibble:tibble-package]{tibble} listing all recipe steps including their \code{recipe_uid}, UID, type, value (if necessary; depending on type), whether the step builds on a randomly picked item, whether the step builds on previously collected data, whether it is active, as well as a character vector of random items to choose from (if \code{use_random_item}).
 }
 \description{
 Get a tibble of a given recipe's steps
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_recipe_steps(connection, recipe_uid = 21)
-get_recipe_steps(connection, recipe_uid = 21, include_inactive = TRUE)
+get_recipe_steps(connection, recipe_uid = c(21, 32))
+get_recipe_steps(
+    connection,
+    recipe_uid = 21,
+    include_inactive = TRUE
+)
 disconnect(connection)
 }
 
 }
 \seealso{
-[get_recipes()]
+\code{\link[=get_recipes]{get_recipes()}}
 }

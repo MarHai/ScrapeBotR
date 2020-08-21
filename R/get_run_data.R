@@ -1,25 +1,27 @@
 #' Collect (large amounts of) data for a given combination of criteria
 #'
 #' Data is stored heavily within ScrapeBot. Hence, filtering needs to be applied to collect data. Two types of filter are possible:
-#' - Filter on the runs for which to collect data: Specify one or many of run_uid, instance_uid, and recipe_uid. At least one is required.
-#' - Filter on the step for which to collect data: Optionally specify a step_uid.
+#' * Filter on the runs for which to collect data: Specify one or many of `run_uid`, `instance_uid`, and `recipe_uid.` At least one is required.
+#' * Filter on the step for which to collect data: Optionally specify a `step_uid`.
+#' In general, this function only returns data from "success"-ful runs (see [get_runs()]). It then collects runs matching the first set of criteria (i.e., `run_uid`, `instance_uid`, and `recipe_uid`). Ultimately, it collects data, thereby focusing on a specific step if specified.
 #'
-#' In general, this function only returns data from "success"-ful runs (see [get_runs()]). It then collects runs matching the first set of criteria (i.e., run_uid, instance_uid, and recipe_uid). Ultimately, it collects data, thereby focusing on a specific step if specified.
+#' @param connection A connection object, as retrieved from [connect()].
+#' @param run_uid Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If `NULL`, either `instance_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
+#' @param instance_uid Optional numeric UID or a vector of numeric UIDs of the instance to filter data for. If `NULL`, either `run_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
+#' @param recipe_uid Optional numeric UID or a vector of numeric UIDs of the recipe to filter data for. If `NULL`, either `instance_uid` or `run_uid` (or both) has to be provided. Defaults to `NULL`.
+#' @param step_uid Optional numeric UID or a vector of numeric UIDs of a step to filter data for. Defaults to `NULL`.
 #'
-#' @param connection a connection object, as retrieved from [connect()]
-#' @param run_uid optional numeric UID of a specific run to collect data from; if NULL, either `instance_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
-#' @param instance_uid optional numeric UID of the instance to filter data for; if NULL, either `run_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
-#' @param recipe_uid optional numeric UID of the recipe to filter data for; if NULL, either `instance_uid` or `run_uid` (or both) has to be provided. Defaults to `NULL`.
-#' @param step_uid optional numeric UID of a step to filter data for. Defaults to `NULL`.
-#'
-#' @return a [tibble][tibble::tibble-package] listing all data including their creation timestamp, the UIDs of its run, instance, recipe, and step, as well as the data value itself
+#' @return A [tibble][tibble::tibble-package] listing all data including their creation timestamp, the UIDs of its run, instance, recipe, and step, as well as the data value itself.
 #'
 #' @examples
 #' \dontrun{
+#'
 #' connection <- connect('localhost', 'root', 's3cr3t_password')
 #' get_run_data(connection, instance_uid = 42)
 #' get_run_data(connection, run_uid = 256)
 #' get_run_data(connection, recipe_uid = 21)
+#' get_run_data(connection, run_uid = c(256, 1024))
+#' get_run_data(connection, recipe_uid = 21:23)
 #' get_run_data(connection, instance_uid = 42, recipe_uid = 21)
 #' get_run_data(connection, instance_uid = 42, recipe_uid = 21, step_uid = 8)
 #' disconnect(connection)
@@ -71,7 +73,7 @@ get_run_data <- function(connection,
       'WHERE run_uid IN (',
       runs %>% dplyr::pull(uid) %>% paste(collapse = ', '),
       ') ',
-      ifelse(is.null(step_uid), '', paste0('AND a.step_uid = ', as.integer(step_uid), ' ')),
+      ifelse(is.null(step_uid), '', paste0('AND a.step_uid IN (', paste(c(as.integer(step_uid)), collapse = ', '), ') ')),
       'ORDER BY a.created ASC, a.run_uid ASC'
     )
 

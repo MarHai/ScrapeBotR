@@ -13,33 +13,36 @@ get_run_data(
 )
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 
-\item{run_uid}{optional numeric UID of a specific run to collect data from; if NULL, either `instance_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.}
+\item{run_uid}{Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If \code{NULL}, either \code{instance_uid} or \code{recipe_uid} (or both) has to be provided. Defaults to \code{NULL}.}
 
-\item{instance_uid}{optional numeric UID of the instance to filter data for; if NULL, either `run_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.}
+\item{instance_uid}{Optional numeric UID or a vector of numeric UIDs of the instance to filter data for. If \code{NULL}, either \code{run_uid} or \code{recipe_uid} (or both) has to be provided. Defaults to \code{NULL}.}
 
-\item{recipe_uid}{optional numeric UID of the recipe to filter data for; if NULL, either `instance_uid` or `run_uid` (or both) has to be provided. Defaults to `NULL`.}
+\item{recipe_uid}{Optional numeric UID or a vector of numeric UIDs of the recipe to filter data for. If \code{NULL}, either \code{instance_uid} or \code{run_uid} (or both) has to be provided. Defaults to \code{NULL}.}
 
-\item{step_uid}{optional numeric UID of a step to filter data for. Defaults to `NULL`.}
+\item{step_uid}{Optional numeric UID or a vector of numeric UIDs of a step to filter data for. Defaults to \code{NULL}.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all data including their creation timestamp, the UIDs of its run, instance, recipe, and step, as well as the data value itself
+A \link[tibble:tibble-package]{tibble} listing all data including their creation timestamp, the UIDs of its run, instance, recipe, and step, as well as the data value itself.
 }
 \description{
 Data is stored heavily within ScrapeBot. Hence, filtering needs to be applied to collect data. Two types of filter are possible:
-- Filter on the runs for which to collect data: Specify one or many of run_uid, instance_uid, and recipe_uid. At least one is required.
-- Filter on the step for which to collect data: Optionally specify a step_uid.
+\itemize{
+\item Filter on the runs for which to collect data: Specify one or many of \code{run_uid}, \code{instance_uid}, and \code{recipe_uid.} At least one is required.
+\item Filter on the step for which to collect data: Optionally specify a \code{step_uid}.
+In general, this function only returns data from "success"-ful runs (see \code{\link[=get_runs]{get_runs()}}). It then collects runs matching the first set of criteria (i.e., \code{run_uid}, \code{instance_uid}, and \code{recipe_uid}). Ultimately, it collects data, thereby focusing on a specific step if specified.
 }
-\details{
-In general, this function only returns data from "success"-ful runs (see [get_runs()]). It then collects runs matching the first set of criteria (i.e., run_uid, instance_uid, and recipe_uid). Ultimately, it collects data, thereby focusing on a specific step if specified.
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_run_data(connection, instance_uid = 42)
 get_run_data(connection, run_uid = 256)
 get_run_data(connection, recipe_uid = 21)
+get_run_data(connection, run_uid = c(256, 1024))
+get_run_data(connection, recipe_uid = 21:23)
 get_run_data(connection, instance_uid = 42, recipe_uid = 21)
 get_run_data(connection, instance_uid = 42, recipe_uid = 21, step_uid = 8)
 disconnect(connection)
@@ -47,5 +50,5 @@ disconnect(connection)
 
 }
 \seealso{
-[get_runs()], [get_run_log()]
+\code{\link[=get_runs]{get_runs()}}, \code{\link[=get_run_log]{get_run_log()}}
 }

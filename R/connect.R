@@ -3,20 +3,21 @@
 #' Connect to a ScrapeBot central database as typically provided during the installation process of a ScrapeBot infrastructure.
 #' Uses RMariaDB to connect to the MySQL server.
 #'
-#' @param host the central database host to connect to as character string
-#' @param user the username to connect to the central database as character string
-#' @param password according password as character string
-#' @param database represents the database name as character string. Defaults to `scrapebot`.
+#' @param host The central database host to connect to as character string.
+#' @param user The username to connect to the central database as character string.
+#' @param password According password as character string.
+#' @param database Represents the database name as character string. Defaults to `scrapebot`.
 #'
-#' @return a connection object (i.e., a list), ready to be passed to other [ScrapeBotR] functions
+#' @return A connection object (i.e., a specified list), ready to be passed to other [ScrapeBotR] functions.
 #'
 #' @examples
 #' \dontrun{
+#'
 #' connect('localhost', 'root', 's3cr3t_password')
 #' connect('127.0.0.1', 'root', 's3cr3t_password', 'my_db')
 #' }
 #'
-#' @seealso [disconnect()] to close a database connection, \url{https://github.com/MarHai/ScrapeBot} for more information on the central database
+#' @seealso [disconnect()] to close a database connection, <https://github.com/MarHai/ScrapeBot> for more information on the central database.
 #'
 #' @export
 

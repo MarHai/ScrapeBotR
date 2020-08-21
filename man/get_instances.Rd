@@ -7,16 +7,17 @@
 get_instances(connection)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all available instances including its UID, name, the date then the instance was first created, its description, as well as the number of runs on that instance and the date of the latest run on that instance
+A \link[tibble:tibble-package]{tibble} listing all available instances including its UID, name, the date then the instance was first created, its description, as well as the number of runs on that instance and the date of the latest run on that instance.
 }
 \description{
 Get a tibble of all available instances
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_instances(connection)
 disconnect(connection)

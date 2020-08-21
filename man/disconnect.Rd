@@ -7,18 +7,19 @@
 disconnect(connection)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 }
 \description{
-Properly closes a database connection. Use this if you are employing multiple connections and/or if you are annoyed by the warnings saying to `call dbDisconnect() when finished working with a connection`.
+Properly closes a database connection. Use this if you are employing multiple connections and/or if you are annoyed by the warnings saying to \verb{call dbDisconnect() when finished working with a connection}.
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 disconnect(connection)
 }
 
 }
 \seealso{
-[connect()]
+\code{\link[=connect]{connect()}}
 }

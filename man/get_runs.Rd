@@ -7,28 +7,30 @@
 get_runs(connection, instance_uid = NULL, recipe_uid = NULL)
 }
 \arguments{
-\item{connection}{a connection object, as retrieved from [connect()]}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
 
-\item{instance_uid}{numeric UID of the instance to filter runs for. If NULL, `recipe_uid` has to be provided. Defaults to NULL.}
+\item{instance_uid}{Numeric UID or a vector of numeric UIDs of the instance to filter runs for. If NULL, \code{recipe_uid} has to be provided. Defaults to \code{NULL}.}
 
-\item{recipe_uid}{numeric UID of the recipe to filter runs for. If NULL, `instance_uid` has to be provided. Defaults to NULL.}
+\item{recipe_uid}{Numeric UID or a vector of numeric UIDs of the recipe to filter runs for. If \code{NULL}, \code{instance_uid} has to be provided. Defaults to \code{NULL}.}
 }
 \value{
-a [tibble][tibble::tibble-package] listing all runs including their UID, the UID of the run's recipe, the UID of the run's instance, the date when the run started, its runtime (in seconds), and the status (one of: success, error, config_error, command_not_found, in_progress)
+A \link[tibble:tibble-package]{tibble} listing all runs including their UID, the UID of the run's recipe, the UID of the run's instance, the date when the run started, its runtime (in seconds), and the status (one of: \code{success}, \code{error}, \code{config_error}, \code{command_not_found}, \code{in_progress}).
 }
 \description{
 A run represents one execution of a recipe on a certain instance. For this function to provide meaningful results, you need to ...
-- specify only `instance_uid` to list all runs on a specific instance
-- specify only `recipe_uid` to list all runs for a specific recipe
-- specify both `instance_uid` and `recipe_uid` to list all runs of a specific recipe on a given instance
+\itemize{
+\item specify only \code{instance_uid} to list all runs on a specific instance
+\item specify only \code{recipe_uid} to list all runs for a specific recipe
+\item specify both \code{instance_uid} and \code{recipe_uid} to list all runs of a specific recipe on a given instance
+}
 }
 \details{
 The function will yield an error if neither one of instance/recipe is provided.
-
-Note that the resulting tibble might be rather large and the request could take some time.
+\strong{Note} that the resulting tibble might be rather large and the request could take some time.
 }
 \examples{
 \dontrun{
+
 connection <- connect('localhost', 'root', 's3cr3t_password')
 get_runs(connection, instance_uid = 42, recipe_uid = 21)
 get_runs(connection, instance_uid = 42)
@@ -38,5 +40,5 @@ disconnect(connection)
 
 }
 \seealso{
-[get_run_data()], [get_run_log()]
+\code{\link[=get_run_data]{get_run_data()}}, \code{\link[=get_run_log]{get_run_log()}}
 }

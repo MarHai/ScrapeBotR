@@ -1,22 +1,22 @@
 #' Get a tibble of all runs for the provided instance/recipe
 #'
 #' A run represents one execution of a recipe on a certain instance. For this function to provide meaningful results, you need to ...
-#' - specify only `instance_uid` to list all runs on a specific instance
-#' - specify only `recipe_uid` to list all runs for a specific recipe
-#' - specify both `instance_uid` and `recipe_uid` to list all runs of a specific recipe on a given instance
+#' * specify only `instance_uid` to list all runs on a specific instance
+#' * specify only `recipe_uid` to list all runs for a specific recipe
+#' * specify both `instance_uid` and `recipe_uid` to list all runs of a specific recipe on a given instance
 #'
 #' The function will yield an error if neither one of instance/recipe is provided.
+#' **Note** that the resulting tibble might be rather large and the request could take some time.
 #'
-#' Note that the resulting tibble might be rather large and the request could take some time.
+#' @param connection A connection object, as retrieved from [connect()].
+#' @param instance_uid Numeric UID or a vector of numeric UIDs of the instance to filter runs for. If NULL, `recipe_uid` has to be provided. Defaults to `NULL`.
+#' @param recipe_uid Numeric UID or a vector of numeric UIDs of the recipe to filter runs for. If `NULL`, `instance_uid` has to be provided. Defaults to `NULL`.
 #'
-#' @param connection a connection object, as retrieved from [connect()]
-#' @param instance_uid numeric UID of the instance to filter runs for. If NULL, `recipe_uid` has to be provided. Defaults to NULL.
-#' @param recipe_uid numeric UID of the recipe to filter runs for. If NULL, `instance_uid` has to be provided. Defaults to NULL.
-#'
-#' @return a [tibble][tibble::tibble-package] listing all runs including their UID, the UID of the run's recipe, the UID of the run's instance, the date when the run started, its runtime (in seconds), and the status (one of: success, error, config_error, command_not_found, in_progress)
+#' @return A [tibble][tibble::tibble-package] listing all runs including their UID, the UID of the run's recipe, the UID of the run's instance, the date when the run started, its runtime (in seconds), and the status (one of: `success`, `error`, `config_error`, `command_not_found`, `in_progress`).
 #'
 #' @examples
 #' \dontrun{
+#'
 #' connection <- connect('localhost', 'root', 's3cr3t_password')
 #' get_runs(connection, instance_uid = 42, recipe_uid = 21)
 #' get_runs(connection, instance_uid = 42)
@@ -47,9 +47,9 @@ get_runs <- function(connection, instance_uid = NULL, recipe_uid = NULL) {
       'LEFT JOIN recipe b ON (a.recipe_uid = b.uid) ',
       'LEFT JOIN instance c ON (a.instance_uid = c.uid) ',
       'WHERE ',
-      ifelse(is.null(instance_uid), '1 = 1 ', paste0('a.instance_uid = ', as.integer(instance_uid), ' ')),
+      ifelse(is.null(instance_uid), '1 = 1 ', paste0('a.instance_uid IN (', paste(c(as.integer(instance_uid)), collapse = ', '), ') ')),
       'AND ',
-      ifelse(is.null(recipe_uid), '1 = 1 ', paste0('a.recipe_uid = ', as.integer(recipe_uid), ' ')),
+      ifelse(is.null(recipe_uid), '1 = 1 ', paste0('a.recipe_uid IN (', paste(c(as.integer(recipe_uid)), collapse = ', '), ') ')),
       'GROUP BY a.uid ',
       'ORDER BY a.created ASC'
     )
