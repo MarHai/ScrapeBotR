@@ -22,7 +22,7 @@ Get a tibble of a given recipe's steps
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_recipe_steps(connection, recipe_uid = 21)
 get_recipe_steps(connection, recipe_uid = c(21, 32))
 get_recipe_steps(

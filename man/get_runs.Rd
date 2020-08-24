@@ -31,7 +31,7 @@ The function will yield an error if neither one of instance/recipe is provided.
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_runs(connection, instance_uid = 42, recipe_uid = 21)
 get_runs(connection, instance_uid = 42)
 get_runs(connection, recipe_uid = 21)

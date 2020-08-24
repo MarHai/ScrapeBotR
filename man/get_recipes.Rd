@@ -27,7 +27,7 @@ You may change this behavior in two ways (or combinations thereof):
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_recipes(connection)
 get_recipes(connection, include_inactive = TRUE)
 disconnect(connection)

@@ -18,7 +18,7 @@ Get a tibble of all available instances
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_instances(connection)
 disconnect(connection)
 }

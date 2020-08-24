@@ -7,7 +7,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' connection <- connect('localhost', 'root', 's3cr3t_password')
+#' connection <- connect('my_db on localhost')
 #' disconnect(connection)
 #' }
 #'
@@ -17,7 +17,7 @@
 disconnect <- function(connection) {
 
   # Test input
-  if(is.null(connection$db) | !DBI::dbIsValid(connection$db)) {
+  if(is.null(connection$db)) {
     stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
   }
 

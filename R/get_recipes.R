@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' connection <- connect('localhost', 'root', 's3cr3t_password')
+#' connection <- connect('my_db on localhost')
 #' get_recipes(connection)
 #' get_recipes(connection, include_inactive = TRUE)
 #' disconnect(connection)
@@ -27,7 +27,7 @@
 get_recipes <- function(connection, instance_uid = NULL, include_inactive = FALSE) {
 
   # Test input
-  if(is.null(connection$db) | !DBI::dbIsValid(connection$db)) {
+  if(is.null(connection$db)) {
     stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
   }
 

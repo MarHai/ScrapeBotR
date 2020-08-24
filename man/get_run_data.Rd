@@ -37,7 +37,7 @@ In general, this function only returns data from "success"-ful runs (see \code{\
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_run_data(connection, instance_uid = 42)
 get_run_data(connection, run_uid = 256)
 get_run_data(connection, recipe_uid = 21)

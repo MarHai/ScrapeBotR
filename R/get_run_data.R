@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' connection <- connect('localhost', 'root', 's3cr3t_password')
+#' connection <- connect('my_db on localhost')
 #' get_run_data(connection, instance_uid = 42)
 #' get_run_data(connection, run_uid = 256)
 #' get_run_data(connection, recipe_uid = 21)
@@ -36,7 +36,7 @@ get_run_data <- function(connection,
                          step_uid = NULL) {
 
   # Test input
-  if(is.null(connection$db) | !DBI::dbIsValid(connection$db)) {
+  if(is.null(connection$db)) {
     stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
   }
   if(is.null(run_uid) & is.null(instance_uid) & is.null(recipe_uid)) {
@@ -50,7 +50,16 @@ get_run_data <- function(connection,
       get_runs(connection, instance_uid, recipe_uid) %>%
       dplyr::filter(status == 'success')
   } else {
-    runs <- tibble::tibble(uid = as.integer(c(run_uid)))
+    runs <-
+      DBI::dbGetQuery(connection$db,
+                      paste0(
+                        'SELECT uid, recipe_uid, instance_uid, created AS started, runtime, status ',
+                        'FROM run ',
+                        'WHERE uid IN (',
+                        paste(c(as.integer(run_uid)), collapse = ', '),
+                        ') '
+                      )) %>%
+      tibble::as_tibble()
   }
 
   if(nrow(runs) == 0) {

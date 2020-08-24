@@ -15,7 +15,7 @@ Properly closes a database connection. Use this if you are employing multiple co
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 disconnect(connection)
 }
 

@@ -9,7 +9,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' connection <- connect('localhost', 'root', 's3cr3t_password')
+#' connection <- connect('my_db on localhost')
 #' get_recipe_steps(connection, recipe_uid = 21)
 #' get_recipe_steps(connection, recipe_uid = c(21, 32))
 #' get_recipe_steps(
@@ -27,7 +27,7 @@
 get_recipe_steps <- function(connection, recipe_uid, include_inactive = FALSE) {
 
   # Test input
-  if(is.null(connection$db) | !DBI::dbIsValid(connection$db)) {
+  if(is.null(connection$db)) {
     stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
   }
   if(is.null(recipe_uid)) {

@@ -20,7 +20,7 @@ Retrieve log entries for a provided run
 \examples{
 \dontrun{
 
-connection <- connect('localhost', 'root', 's3cr3t_password')
+connection <- connect('my_db on localhost')
 get_run_log(connection, 13)
 get_run_log(connection, c(13, 99))
 disconnect(connection)
