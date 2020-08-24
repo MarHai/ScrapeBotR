@@ -4,6 +4,14 @@
 #' The package provides easy-to-use functions to read and export instances, recipes, runs, log information, and data.
 #' Thereby, the package plugs neatly into the tidyverse as it makes heavy use of tibbles.
 #'
+#' @section Getting Started:
+#' - Create a credentials file to connect to your database. You may do so using [write_credentials()].
+#' - Create a connection object by using [connect()].
+#' - List the available recipes through [get_recipes()] or the available instances through [get_instances()].
+#' - Get information about specific runs through [get_runs()].
+#' - Collect data via [get_run_data()].
+#' - [disconnect()] from your database.
+#'
 #' @section ScrapeBot:
 #' The ScrapeBot (without "R") is a non-R tool for so-called "agent-based testing" to automatically visit, modify, and scrape a defined set of webpages regularly.
 #' It was built to automate various web-based tasks and keep track of them in a controllable way for academic research, primarily in the realm of computational social science.

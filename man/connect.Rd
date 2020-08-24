@@ -4,16 +4,12 @@
 \alias{connect}
 \title{Connect to database}
 \usage{
-connect(host, user, password, database = "scrapebot")
+connect(credentials_section, credentials_file = "~/.scrapebot_database.ini")
 }
 \arguments{
-\item{host}{The central database host to connect to as character string.}
+\item{credentials_section}{The section within your INI file holding the credentials. If \code{\link[=write_credentials]{write_credentials()}} was used to create the INI file, then the section is called "\code{database} on \code{host}" (e.g., "scrapebot on localhost").}
 
-\item{user}{The username to connect to the central database as character string.}
-
-\item{password}{According password as character string.}
-
-\item{database}{Represents the database name as character string. Defaults to \code{scrapebot}.}
+\item{credentials_file}{The INI file to use. If \code{\link[=write_credentials]{write_credentials()}} was used to create the INI file, then it is called \code{~/.scrapebot_database.ini} (the default). Note that the file must (!) be located inside your home directory (i.e., somewhere inside \code{~} as this is a required by \url{https://mariadb.com/kb/en/configuring-mariadb-with-option-files/}).}
 }
 \value{
 A connection object (i.e., a specified list), ready to be passed to other \link{ScrapeBotR} functions.
@@ -22,14 +18,17 @@ A connection object (i.e., a specified list), ready to be passed to other \link{
 Connect to a ScrapeBot central database as typically provided during the installation process of a ScrapeBot infrastructure.
 Uses RMariaDB to connect to the MySQL server.
 }
+\details{
+In order not to use database credentials here, you need to set up an INI file containing your database credentials. You can do this by hand (see \code{\link[=write_credentials]{write_credentials()}}) or use the \code{\link[=write_credentials]{write_credentials()}} function.
+}
 \examples{
 \dontrun{
 
-connect('localhost', 'root', 's3cr3t_password')
-connect('127.0.0.1', 'root', 's3cr3t_password', 'my_db')
+connect('my_db on localhost')
+connect('my_db on localhost', '~/my_own_credentials_file.ini')
 }
 
 }
 \seealso{
-\code{\link[=disconnect]{disconnect()}} to close a database connection, \url{https://github.com/MarHai/ScrapeBot} for more information on the central database.
+\code{\link[=write_credentials]{write_credentials()}} to help create the credentials file, \code{\link[=disconnect]{disconnect()}} to close a database connection, \url{https://github.com/MarHai/ScrapeBot} for more information on the central database.
 }

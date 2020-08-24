@@ -9,6 +9,18 @@ ScrapeBotR allows to easily retrieve (large amounts of) data from a \href{https:
 The package provides easy-to-use functions to read and export instances, recipes, runs, log information, and data.
 Thereby, the package plugs neatly into the tidyverse as it makes heavy use of tibbles.
 }
+\section{Getting Started}{
+
+\itemize{
+\item Create a credentials file to connect to your database. You may do so using \code{\link[=write_credentials]{write_credentials()}}.
+\item Create a connection object by using \code{\link[=connect]{connect()}}.
+\item List the available recipes through \code{\link[=get_recipes]{get_recipes()}} or the available instances through \code{\link[=get_instances]{get_instances()}}.
+\item Get information about specific runs through \code{\link[=get_runs]{get_runs()}}.
+\item Collect data via \code{\link[=get_run_data]{get_run_data()}}.
+\item \code{\link[=disconnect]{disconnect()}} from your database.
+}
+}
+
 \section{ScrapeBot}{
 
 The ScrapeBot (without "R") is a non-R tool for so-called "agent-based testing" to automatically visit, modify, and scrape a defined set of webpages regularly.
