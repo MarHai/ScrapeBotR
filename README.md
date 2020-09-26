@@ -23,7 +23,7 @@ Import the installed version ...
 library(ScrapeBotR)
 ```
 
-... and start using it by defining your [ScrapeBot](https://github.com/MarHai/ScrapeBot) database. Credentials to access your database need to be stored in an INI file somewhere in your computer's home directory (i.e., under `~/`, which usually translates  to `/home/my_user` under *nix or `C:\\Users\\my_user\\Documents` under Windows). You can either create this file by hand or use the ScrapeBotR's helper function to create it:
+... and start using it by defining your [ScrapeBot](https://github.com/MarHai/ScrapeBot) database. Credentials to access your database need to be stored in an INI file somewhere in your computer's home directory (i.e., under `~/`, which usually translates  to `/home/my_user` under *nix or `C:\Users\my_user\Documents` under Windows). You can either create this file by hand or use the ScrapeBotR's helper function to create it:
 
 ```
 write_credentials(
@@ -56,6 +56,7 @@ If this doesn't yield an error, you are good to go. And you could start, for exa
 - listing the available instances through `get_instances()`
 - get information about specific runs through `get_runs()`
 - Collect data via `get_run_data()`
+- bulk-download-and-compress screenshots from S3 via `collect_screenshots_from_s3()`
 - ...
 
 Detailed documentation is available for every function inside R.

@@ -10,6 +10,7 @@
 #' - List the available recipes through [get_recipes()] or the available instances through [get_instances()].
 #' - Get information about specific runs through [get_runs()].
 #' - Collect data via [get_run_data()].
+#' - Bulk-download (and resize) screenshots from S3 through [collect_screenshots_from_s3()].
 #' - [disconnect()] from your database.
 #'
 #' @section ScrapeBot:

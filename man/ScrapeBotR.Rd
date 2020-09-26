@@ -17,6 +17,7 @@ Thereby, the package plugs neatly into the tidyverse as it makes heavy use of ti
 \item List the available recipes through \code{\link[=get_recipes]{get_recipes()}} or the available instances through \code{\link[=get_instances]{get_instances()}}.
 \item Get information about specific runs through \code{\link[=get_runs]{get_runs()}}.
 \item Collect data via \code{\link[=get_run_data]{get_run_data()}}.
+\item Bulk-download (and resize) screenshots from S3 through \code{\link[=collect_screenshots_from_s3]{collect_screenshots_from_s3()}}.
 \item \code{\link[=disconnect]{disconnect()}} from your database.
 }
 }

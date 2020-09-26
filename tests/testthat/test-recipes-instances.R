@@ -18,7 +18,7 @@ test_that('can you get recipes and recipe steps', {
   expect_error(get_recipes(NULL),
                'Connection needs to be a valid connection object')
 
-  recipes <- get_recipes(connection)
+  recipes <- get_recipes(connection, include_inactive = TRUE)
   expect_s3_class(recipes, 'tbl_df')
   expect_equal(colnames(recipes),
                c('uid', 'name', 'created', 'description', 'active', 'runs_count', 'runs_latest'))
@@ -28,7 +28,7 @@ test_that('can you get recipes and recipe steps', {
     recipes %>%
     dplyr::slice_sample(n = 1) %>%
     dplyr::pull(uid)
-  steps <- get_recipe_steps(connection, recipe_uid)
+  steps <- get_recipe_steps(connection, recipe_uid, include_inactive = TRUE)
   expect_s3_class(steps, 'tbl_df')
   expect_equal(colnames(steps),
                c('recipe_uid', 'uid', 'type', 'value', 'use_random_item', 'use_data_item', 'active', 'random_items'))
