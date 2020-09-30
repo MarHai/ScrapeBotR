@@ -1,7 +1,7 @@
 Package: ScrapeBotR
 Type: Package
 Title: Retrieve Data from a ScrapeBot Database
-Version: 0.4.0
+Version: 0.4.1
 Authors@R:
     person(given = 'Mario', 
            family = 'Haim', 
