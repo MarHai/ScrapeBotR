@@ -83,7 +83,7 @@ get_run_data <- function(connection,
       runs %>% dplyr::pull(uid) %>% paste(collapse = ', '),
       ') ',
       ifelse(is.null(step_uid), '', paste0('AND a.step_uid IN (', paste(c(as.integer(step_uid)), collapse = ', '), ') ')),
-      'ORDER BY a.created ASC, a.run_uid ASC'
+      'ORDER BY a.created ASC, a.run_uid ASC, a.uid ASC'
     )
 
     # Since this result can be quite large, we go through in portions
