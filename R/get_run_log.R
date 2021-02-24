@@ -1,6 +1,6 @@
 #' Retrieve log entries for a provided run
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #' @param run_uid Numeric UID or a vector of numeric UIDs of the run to find log entries for.
 #'
 #' @return A [tibble][tibble::tibble-package] listing all log entries including a timestamp, its type (one of: `info`, `warning`, `error`), and the message itself.
@@ -22,7 +22,7 @@ get_run_log <- function(connection, run_uid) {
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
   if(is.null(run_uid)) {
     stop('Missing numeric run_uid to collect its log entries.')

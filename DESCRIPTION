@@ -1,7 +1,7 @@
 Package: ScrapeBotR
 Type: Package
-Title: Retrieve Data from a ScrapeBot Database
-Version: 0.4.1
+Title: Orchestrate Instances and Retrieve Data from a ScrapeBot Database
+Version: 0.5.0
 Authors@R:
     person(given = 'Mario', 
            family = 'Haim', 
@@ -21,11 +21,16 @@ Imports:
     dplyr,
     magick,
     magrittr,
+    openssl,
+    paws,
+    readr,
     RMariaDB,
+    ssh,
     stringr,
     tibble
 Suggests: 
-    DBItest,
     testthat
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
+Depends: 
+    R (>= 2.10)

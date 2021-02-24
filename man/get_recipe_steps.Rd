@@ -7,7 +7,7 @@
 get_recipe_steps(connection, recipe_uid, include_inactive = FALSE)
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
 \item{recipe_uid}{Numeric UID or a vector of numeric UIDs of the recipe to retrieve steps for.}
 

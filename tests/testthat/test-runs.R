@@ -1,7 +1,7 @@
 context('runs')
 
 test_that('is it possible to fetch runs, run logs, and run data', {
-  connection <- connect('haim.it')
+  connection <- connect_scrapebot('haim.it')
 
   expect_error(get_runs(NULL),
                'Connection needs to be a valid connection object')

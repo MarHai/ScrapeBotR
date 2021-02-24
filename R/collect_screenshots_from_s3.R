@@ -2,10 +2,8 @@
 #'
 #' Download screenshots previously stored on S3 through ScrapeBot instances. The function will collect those cases in the data that refer to S3-stored screenshots and download them to a local output directory. While doing so, the funtion can also resize images to save local disk space.
 #'
-#' @param connection A connection object, as retrieved from [connect()].
-#' @param aws_access Character string. The AWS access key, as provided in the ScrapeBot config file under "awsaccess".
-#' @param aws_secret Character string. The AWS secret, as provided in the ScrapeBot config file under "awssecret".
-#' @param aws_bucket Character string. The AWS bucket, as provided in the ScrapeBot config file under "awsbucket".
+#' @param scrapebot_connection A connection object, as retrieved from [connect_scrapebot()].
+#' @param aws_connection AWS connection object, as retrieved from [connect_aws()]. This also specifies the region.
 #' @param run_uid Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If `NULL`, either `instance_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
 #' @param instance_uid Optional numeric UID or a vector of numeric UIDs of the instance to filter data for. If `NULL`, either `run_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
 #' @param recipe_uid Optional numeric UID or a vector of numeric UIDs of the recipe to filter data for. If `NULL`, either `instance_uid` or `run_uid` (or both) has to be provided. Defaults to `NULL`.
@@ -23,19 +21,16 @@
 #'
 #' connection <- connect('my_db on localhost')
 #' collect_screenshots_from_s3(
-#'   connection,
-#'   'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+#'   scrapebot_connection, aws_connection,
 #'   run_uid = 42
 #' )
 #' collect_screenshots_from_s3(
-#'   connection,
-#'   'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+#'   scrapebot_connection, aws_connection,
 #'   run_uid = 42,
 #'   resize = TRUE, resize_max_width = 800
 #' )
 #' collect_screenshots_from_s3(
-#'   connection,
-#'   'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+#'   scrapebot_connection, aws_connection,
 #'   run_uid = 42,
 #'   output_directory = 'download_dir/'
 #' )
@@ -44,8 +39,8 @@
 #'
 #' @importFrom magrittr %>%
 #' @export
-collect_screenshots_from_s3 <- function(connection,
-                                        aws_access, aws_secret, aws_bucket,
+collect_screenshots_from_s3 <- function(scrapebot_connection,
+                                        aws_connection,
                                         run_uid = NULL, instance_uid = NULL, recipe_uid = NULL,
                                         include_inactive = FALSE,
                                         resize = FALSE,
@@ -54,8 +49,11 @@ collect_screenshots_from_s3 <- function(connection,
                                         verbose = TRUE) {
 
   # Test input
-  if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+  if(is.null(scrapebot_connection$db)) {
+    stop('Connection needs to be a valid ScrapeBot connection object, initiated through ScrapeBotR::connect_scrapebot.')
+  }
+  if(!is.character(aws_connection$s3_bucket)) {
+    stop('AWS connection needs to be set up, initiated through ScrapeBotR::connect_aws.')
   }
   if(is.null(run_uid) & is.null(instance_uid) & is.null(recipe_uid)) {
     stop('Either run_uid or instance_uid or recipe_uid (or a combination thereof) need(s) to be provided.')
@@ -65,7 +63,7 @@ collect_screenshots_from_s3 <- function(connection,
   }
 
   # Find recipes
-  recipes <- get_recipes(connection, instance_uid, include_inactive)
+  recipes <- get_recipes(scrapebot_connection, instance_uid, include_inactive)
   if(!is.null(recipe_uid)) {
     recipes <-
       recipes %>%
@@ -92,7 +90,7 @@ collect_screenshots_from_s3 <- function(connection,
 
   # Identify recipe steps with screenshots
   steps <-
-    get_recipe_steps(connection, recipes$uid, include_inactive) %>%
+    get_recipe_steps(scrapebot_connection, recipes$uid, include_inactive) %>%
     dplyr::filter(stringr::str_detect(type, stringr::fixed('screenshot')))
   if(nrow(steps) == 0) {
     warning('No recipe steps match your combined criteria of instance_uid, recipe_uid, and include_inactive.')
@@ -115,7 +113,7 @@ collect_screenshots_from_s3 <- function(connection,
 
   # Find data of respective steps
   data <-
-    get_run_data(connection, run_uid, instance_uid, recipes$uid, steps$uid) %>%
+    get_run_data(scrapebot_connection, run_uid, instance_uid, recipes$uid, steps$uid) %>%
     dplyr::filter(stringr::str_detect(value, '^s3:\\/\\/.+$'))
   if(nrow(data) == 0) {
     warning('No data matches your combined criteria of run_uid, instance_uid, recipe_uid, and include_inactive.')
@@ -142,17 +140,17 @@ collect_screenshots_from_s3 <- function(connection,
 
   # Download (and resize) images
   s3_region <- NULL
-  s3_buckets <- aws.s3::bucketlist(add_region = TRUE, key = aws_access, secret = aws_secret)
+  s3_buckets <- aws.s3::bucketlist(add_region = TRUE, key = aws_connection$aws_access_key, secret = aws_connection$aws_secret)
   if(is.data.frame(s3_buckets)) {
     s3_buckets <-
       tibble::as_tibble(s3_buckets) %>%
-      dplyr::filter(Bucket == aws_bucket)
+      dplyr::filter(Bucket == aws_connection$s3_bucket)
     if(nrow(s3_buckets) == 1) {
       s3_region <- s3_buckets[[1, 'Region']]
     }
   }
   if(is.null(s3_region)) {
-    warning('S3 bucket not found or could not be reached. Double-check aws_secret, aws_access, and aws_bucket.')
+    warning('S3 bucket not found or could not be reached. Double-check aws_connection (connect_aws()) and particularly its region.')
     return(tibble::tibble(
       created = as.POSIXct(character()),
       run_uid = integer(),
@@ -174,7 +172,7 @@ collect_screenshots_from_s3 <- function(connection,
   n_images <- nrow(data)
   n_images_10p <- floor(n_images*.1)
   for(i in 1:n_images) {
-    s3_head <- aws.s3::head_object(data[[i, 'value']], key = aws_access, secret = aws_secret, region = s3_region)
+    s3_head <- aws.s3::head_object(data[[i, 'value']], key = aws_connection$aws_access_key, secret = aws_connection$aws_secret, region = s3_region)
     if(!s3_head) {
       images <-
         images %>%
@@ -197,9 +195,9 @@ collect_screenshots_from_s3 <- function(connection,
         )
     } else {
       image_s3 <- aws.s3::get_object(data[[i, 'value']],
-                                     key = aws_access, secret = aws_secret, region = s3_region,
+                                     key = aws_connection$aws_access_key, secret = aws_connection$aws_secret, region = s3_region,
                                      show_progress = verbose)
-      image_filename <- stringr::str_remove(data[[i, 'value']], stringr::fixed(paste0('s3://', aws_bucket, '/')))
+      image_filename <- stringr::str_remove(data[[i, 'value']], stringr::fixed(paste0('s3://', aws_connection$s3_bucket, '/')))
 
       image_magick <- magick::image_read(image_s3)
       image_info <- magick::image_info(image_magick)

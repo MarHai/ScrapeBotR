@@ -7,7 +7,7 @@
 get_recipes(connection, instance_uid = NULL, include_inactive = FALSE)
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
 \item{instance_uid}{Numeric UID or a vector of numeric UIDs of the instance to filter recipes for. Filtering is inclusive (i.e., recipes are included if they are assigned to at least one of the instances; no need to be assigned to all of them to be returned). If NULL, all recipes are provided. Defaults to \code{NULL}.}
 

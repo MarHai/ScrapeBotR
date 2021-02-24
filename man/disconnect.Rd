@@ -7,10 +7,10 @@
 disconnect(connection)
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 }
 \description{
-Properly closes a database connection. Use this if you are employing multiple connections and/or if you are annoyed by the warnings saying to \verb{call dbDisconnect() when finished working with a connection}.
+Properly closes a database connection. Use this if you are employing multiple connections and/or if you are annoyed by the warnings saying to \verb{call dbDisconnect_scrapebot() when finished working with a connection}.
 }
 \examples{
 \dontrun{
@@ -21,5 +21,5 @@ disconnect(connection)
 
 }
 \seealso{
-\code{\link[=connect]{connect()}}
+\code{\link[=connect_scrapebot]{connect_scrapebot()}}
 }

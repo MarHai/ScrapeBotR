@@ -7,7 +7,7 @@
 get_run_log(connection, run_uid)
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
 \item{run_uid}{Numeric UID or a vector of numeric UIDs of the run to find log entries for.}
 }

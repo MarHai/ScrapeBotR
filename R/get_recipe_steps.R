@@ -1,6 +1,6 @@
 #' Get a tibble of a given recipe's steps
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #' @param recipe_uid Numeric UID or a vector of numeric UIDs of the recipe to retrieve steps for.
 #' @param include_inactive If `TRUE`, inactive recipes are included along active recipes; defaults to `FALSE`.
 #'
@@ -28,7 +28,7 @@ get_recipe_steps <- function(connection, recipe_uid, include_inactive = FALSE) {
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
   if(is.null(recipe_uid)) {
     stop('Missing numeric recipe_uid to collect its steps.')

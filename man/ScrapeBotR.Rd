@@ -3,22 +3,36 @@
 \docType{package}
 \name{ScrapeBotR}
 \alias{ScrapeBotR}
-\title{ScrapeBotR: Retrieve Data from a ScrapeBot Database}
+\title{ScrapeBotR: Orchestrate Instances and Retrieve Data from a ScrapeBot Database}
 \description{
 ScrapeBotR allows to easily retrieve (large amounts of) data from a \href{https://github.com/MarHai/ScrapeBot}{ScrapeBot} installation.
 The package provides easy-to-use functions to read and export instances, recipes, runs, log information, and data.
+The package also allows to orchestrate instances on your AWS account (caution: may cause real costs).
 Thereby, the package plugs neatly into the tidyverse as it makes heavy use of tibbles.
 }
 \section{Getting Started}{
 
 \itemize{
-\item Create a credentials file to connect to your database. You may do so using \code{\link[=write_credentials]{write_credentials()}}.
-\item Create a connection object by using \code{\link[=connect]{connect()}}.
+\item Create a credentials file to connect to your database. You may do so using \code{\link[=write_scrapebot_credentials]{write_scrapebot_credentials()}}.
+\item Create a connection object by using \code{\link[=connect_scrapebot]{connect_scrapebot()}}.
 \item List the available recipes through \code{\link[=get_recipes]{get_recipes()}} or the available instances through \code{\link[=get_instances]{get_instances()}}.
 \item Get information about specific runs through \code{\link[=get_runs]{get_runs()}}.
 \item Collect data via \code{\link[=get_run_data]{get_run_data()}}.
 \item Bulk-download (and resize) screenshots from S3 through \code{\link[=collect_screenshots_from_s3]{collect_screenshots_from_s3()}}.
 \item \code{\link[=disconnect]{disconnect()}} from your database.
+}
+}
+
+\section{Orchestrate AWS}{
+
+You can use this package to orchestrate your Amazon Web Services (AWS) account.
+Once set up with IAM user credentials, this package allows you to ...
+\itemize{
+\item set up an RDS database and install a new ScrapeBot central database therein
+\item set up S3 storage to upload your screenshots to
+\item set up multiple EC2 instances as, well, ScrapeBot instances, immediately ready to run
+\item vary regions, browser sizes, language, and the like
+\item terminate all of these servers for good
 }
 }
 

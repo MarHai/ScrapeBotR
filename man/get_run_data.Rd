@@ -13,7 +13,7 @@ get_run_data(
 )
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
 \item{run_uid}{Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If \code{NULL}, either \code{instance_uid} or \code{recipe_uid} (or both) has to be provided. Defaults to \code{NULL}.}
 

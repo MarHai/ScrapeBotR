@@ -1,9 +1,13 @@
 context('write_credentials, connect, and disconnect')
 
 test_that('is able to create credentials file', {
-  expect_equal(write_credentials('my_host', 'my_user', 'my_password', 'my_database', 1234),
-               '~/.scrapebot_database.ini')
-  config <- configr::read.config('~/.scrapebot_database.ini')
+  expect_equal(write_scrapebot_credentials('my_host',
+                                           'my_user',
+                                           'my_password',
+                                           'my_database',
+                                           1234),
+               path.expand('~/.scrapebot.ini'))
+  config <- configr::read.config('~/.scrapebot.ini')
   expect_type(config, 'list')
   expect_true('my_database on my_host' %in% names(config))
   expect_equal(config[['my_database on my_host']][['host']], 'my_host')
@@ -14,22 +18,22 @@ test_that('is able to create credentials file', {
 })
 
 test_that('can communicate with a database', {
-  expect_error(connect(NULL),
+  expect_error(connect_scrapebot(NULL),
                'Credential section needs to be a character string.')
 
-  expect_error(connect('my_section'),
+  expect_error(connect_scrapebot('my_section'),
                'Database connection could not be established')
 
-  expect_error(connect('my_section', 'my_file'),
+  expect_error(connect_scrapebot('my_section', 'my_file'),
                'Database connection could not be established')
 
-  connection <- connect('haim.it')
+  connection <- connect_scrapebot('haim.it')
   expect_type(connection, 'list')
   expect_invisible(disconnect(connection))
 })
 
 test_that('connection objects look good', {
-  connection <- connect('haim.it')
+  connection <- connect_scrapebot('haim.it')
   expect_s4_class(connection$db, 'MariaDBConnection')
   expect_type(connection$db_type, 'character')
   expect_type(connection$db_version, 'character')

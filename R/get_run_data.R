@@ -5,7 +5,7 @@
 #' * Filter on the step for which to collect data: Optionally specify a `step_uid`.
 #' In general, this function only returns data from "success"-ful runs (see [get_runs()]). It then collects runs matching the first set of criteria (i.e., `run_uid`, `instance_uid`, and `recipe_uid`). Ultimately, it collects data, thereby focusing on a specific step if specified.
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #' @param run_uid Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If `NULL`, either `instance_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
 #' @param instance_uid Optional numeric UID or a vector of numeric UIDs of the instance to filter data for. If `NULL`, either `run_uid` or `recipe_uid` (or both) has to be provided. Defaults to `NULL`.
 #' @param recipe_uid Optional numeric UID or a vector of numeric UIDs of the recipe to filter data for. If `NULL`, either `instance_uid` or `run_uid` (or both) has to be provided. Defaults to `NULL`.
@@ -37,7 +37,7 @@ get_run_data <- function(connection,
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
   if(is.null(run_uid) & is.null(instance_uid) & is.null(recipe_uid)) {
     stop('Either run_uid or instance_uid or recipe_uid (or a combination thereof) need(s) to be provided.')

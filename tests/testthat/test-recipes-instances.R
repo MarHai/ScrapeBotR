@@ -1,7 +1,7 @@
 context('recipes and instances')
 
 test_that('is it possible to fetch instances', {
-  connection <- connect('haim.it')
+  connection <- connect_scrapebot('haim.it')
   expect_error(get_instances(NULL),
                'Connection needs to be a valid connection object')
   instances <- get_instances(connection)
@@ -13,7 +13,7 @@ test_that('is it possible to fetch instances', {
 })
 
 test_that('can you get recipes and recipe steps', {
-  connection <- connect('haim.it')
+  connection <- connect_scrapebot('haim.it')
 
   expect_error(get_recipes(NULL),
                'Connection needs to be a valid connection object')

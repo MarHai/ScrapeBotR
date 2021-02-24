@@ -1,6 +1,6 @@
 #' Get a tibble of all available instances
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #'
 #' @return A [tibble][tibble::tibble-package] listing all available instances including its UID, name, the date then the instance was first created, its description, as well as the number of runs on that instance and the date of the latest run on that instance.
 #'
@@ -19,7 +19,7 @@ get_instances <- function(connection) {
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
 
   # Collect instances

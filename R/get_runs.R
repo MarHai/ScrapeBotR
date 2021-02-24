@@ -8,7 +8,7 @@
 #' The function will yield an error if neither one of instance/recipe is provided.
 #' **Note** that the resulting tibble might be rather large and the request could take some time.
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #' @param instance_uid Numeric UID or a vector of numeric UIDs of the instance to filter runs for. If NULL, `recipe_uid` has to be provided. Defaults to `NULL`.
 #' @param recipe_uid Numeric UID or a vector of numeric UIDs of the recipe to filter runs for. If `NULL`, `instance_uid` has to be provided. Defaults to `NULL`.
 #'
@@ -32,7 +32,7 @@ get_runs <- function(connection, instance_uid = NULL, recipe_uid = NULL) {
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
   if(is.null(instance_uid) & is.null(recipe_uid)) {
     stop('Either instance_uid or recipe_uid (or both) need(s) to be provided.')

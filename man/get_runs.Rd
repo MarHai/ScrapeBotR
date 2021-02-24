@@ -7,7 +7,7 @@
 get_runs(connection, instance_uid = NULL, recipe_uid = NULL)
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
 \item{instance_uid}{Numeric UID or a vector of numeric UIDs of the instance to filter runs for. If NULL, \code{recipe_uid} has to be provided. Defaults to \code{NULL}.}
 

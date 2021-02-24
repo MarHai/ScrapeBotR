@@ -5,7 +5,7 @@
 #' * If `instance_uid` is set, only recipes assigned to at least one of these instances are returned.
 #' * If `include_inactive` is set to `TRUE`, also recipes currently not active are returned.
 #'
-#' @param connection A connection object, as retrieved from [connect()].
+#' @param connection A connection object, as retrieved from [connect_scrapebot()].
 #' @param instance_uid Numeric UID or a vector of numeric UIDs of the instance to filter recipes for. Filtering is inclusive (i.e., recipes are included if they are assigned to at least one of the instances; no need to be assigned to all of them to be returned). If NULL, all recipes are provided. Defaults to `NULL`.
 #' @param include_inactive If `TRUE`, inactive recipes are included along active recipes; defaults to `FALSE`.
 #'
@@ -28,7 +28,7 @@ get_recipes <- function(connection, instance_uid = NULL, include_inactive = FALS
 
   # Test input
   if(is.null(connection$db)) {
-    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect.')
+    stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
 
   # Collect recipes

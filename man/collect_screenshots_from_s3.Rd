@@ -5,10 +5,8 @@
 \title{Bulk-download (and compress) screenshots stored on S3}
 \usage{
 collect_screenshots_from_s3(
-  connection,
-  aws_access,
-  aws_secret,
-  aws_bucket,
+  scrapebot_connection,
+  aws_connection,
   run_uid = NULL,
   instance_uid = NULL,
   recipe_uid = NULL,
@@ -21,13 +19,9 @@ collect_screenshots_from_s3(
 )
 }
 \arguments{
-\item{connection}{A connection object, as retrieved from \code{\link[=connect]{connect()}}.}
+\item{scrapebot_connection}{A connection object, as retrieved from \code{\link[=connect_scrapebot]{connect_scrapebot()}}.}
 
-\item{aws_access}{Character string. The AWS access key, as provided in the ScrapeBot config file under "awsaccess".}
-
-\item{aws_secret}{Character string. The AWS secret, as provided in the ScrapeBot config file under "awssecret".}
-
-\item{aws_bucket}{Character string. The AWS bucket, as provided in the ScrapeBot config file under "awsbucket".}
+\item{aws_connection}{AWS connection object, as retrieved from \code{\link[=connect_aws]{connect_aws()}}. This also specifies the region.}
 
 \item{run_uid}{Optional numeric UID or a vector of numeric UIDs of a specific run to collect data from. If \code{NULL}, either \code{instance_uid} or \code{recipe_uid} (or both) has to be provided. Defaults to \code{NULL}.}
 
@@ -58,19 +52,16 @@ Download screenshots previously stored on S3 through ScrapeBot instances. The fu
 
 connection <- connect('my_db on localhost')
 collect_screenshots_from_s3(
-  connection,
-  'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+  scrapebot_connection, aws_connection,
   run_uid = 42
 )
 collect_screenshots_from_s3(
-  connection,
-  'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+  scrapebot_connection, aws_connection,
   run_uid = 42,
   resize = TRUE, resize_max_width = 800
 )
 collect_screenshots_from_s3(
-  connection,
-  'my4cc3ssKey', 's3cr3t', 'scrapebotbucket',
+  scrapebot_connection, aws_connection,
   run_uid = 42,
   output_directory = 'download_dir/'
 )
