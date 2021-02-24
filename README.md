@@ -26,7 +26,7 @@ library(ScrapeBotR)
 ... and start using it by defining your [ScrapeBot](https://github.com/MarHai/ScrapeBot) database. Credentials to access your database need to be stored in an INI file somewhere in your computer's home directory (i.e., under `~/`, which usually translates  to `/home/my_user` under *nix or `C:\Users\my_user\Documents` under Windows). You can either create this file by hand or use the ScrapeBotR's helper function to create it:
 
 ```
-write_credentials(
+write_scrapebot_credentials(
   host = 'path_to_my_database',
   user = 'database_username',
   password = 'database_password'
@@ -62,7 +62,12 @@ If this doesn't yield an error, you are good to go. And you could start, for exa
 Since version 0.5.0, you can also orchestrate servers on Amazon Web Services (AWS). Therefore, you first need an AWS account, to which also any raised costs will be charged. Next, generate an IAM user within your AWS account and create an API key. Also, you need an SSH key pair (in PEM format). Afterwards, use the respective R functions parallel to the ScrapeBot database (above) to write your credentials into an INI file and connect to your AWS account:
 
 ```
-write_aws_credentials('aws_access_key', 'aws_access_secret', 'path_to_ssh_private_pem_file', 'path_to_ssh_public_pem_file')
+write_aws_credentials(
+  access_key_id = 'aws_access_key', 
+  secret_access_key = 'aws_access_secret', 
+  ssh_private_pem_file = 'path_to_ssh_private_pem_file', 
+  ssh_public_pem_file = 'path_to_ssh_public_pem_file'
+)
 aws_connection <- connect_aws()
 ```
 
@@ -71,7 +76,9 @@ Given that this does not yield an error, you could ...
 - start an AWS RDS instance as ScrapeBot database through `aws_launch_database()`
 - launch an AWS S3 instance to store screenshots through `aws_launch_storage()`
 - run an EC2 instance as ScrapeBot instance through `aws_launch_instance()`
-- terminate all these AWS instances through the respective `aws_terminate_*` functions
+- store the connection object for later using `aws_save_connection()`
+- restore (load) the connection object some days/weeks/months/studies later through `aws_load_connection()`
+- terminate all AWS instances through the respective `aws_terminate_*` functions
 - ...
 
 Detailed documentation is available for every function inside R.
