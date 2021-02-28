@@ -82,3 +82,7 @@ Given that this does not yield an error, you could ...
 - ...
 
 Detailed documentation is available for every function inside R.
+
+
+## Citation
+[Haim, Mario](https://haim.it) (2021). ScrapeBotR. An R package to orchestrate ScrapeBot for agent-based testing. Available at https://github.com/MarHai/ScrapeBotR/.
