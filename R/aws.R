@@ -29,7 +29,7 @@
 #' - firefox is chosen as the package/browser of choice, emulated through xvfb (as suggested by ScrapeBot).
 #'
 #' @param aws_connection AWS connection object, as retrieved from [connect_aws()]. This also specifies the region.
-#' @param instance_owner The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a warning will be raised).
+#' @param instance_owner The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a text will be raised).
 #' @param scrapebot_credential_section The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by [aws_launch_database()] into the aws_connection object.
 #' @param ec2_type AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.
 #' @param browser_useragent The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.
@@ -219,23 +219,13 @@ aws_launch_instance <- function(aws_connection,
   scrapebot_connection <- connect_scrapebot(scrapebot_credential_section)
 
   # register ScrapeBot instance with central database
-  instance_owner_user_id <- get_or_create_user(scrapebot_connection,
-                                               instance_owner)
-  DBI::dbAppendTable(scrapebot_connection$db,
-                     'instance',
-                     data.frame(name = instance.host,
-                                created = as.character(instance.created),
-                                description = paste0(browser_width, 'x', browser_height, ', ',
-                                                     browser_language, ', ',
-                                                     aws_connection$region, ', ',
-                                                     'launched via ScrapeBotR'),
-                                owner_uid = instance_owner_user_id))
-
-  instances <- get_instances(scrapebot_connection)
-  instances.db <-
-    instances %>%
-    dplyr::filter(name == instance.host)
-  instances.uid <- as.integer(instances.db[[1, 'uid']])
+  instances.uid <- add_instance(scrapebot_connection,
+                                instance.host,
+                                instance_owner,
+                                paste0(browser_width, 'x', browser_height, ', ',
+                                       browser_language, ', ',
+                                       aws_connection$region, ', ',
+                                       'launched via ScrapeBotR'))
 
   # create and upload config file
   scrapebot.config <- configr::read.config(scrapebot_connection$credentials_file)[[scrapebot_connection$credentials_section]]

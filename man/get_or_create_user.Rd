@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_or_create_user.R
 \name{get_or_create_user}
 \alias{get_or_create_user}
-\title{Get a tibble of all available instances}
+\title{Based on a given ScrapeBot user's email address, get this user's \code{UID} (or create it first)}
 \usage{
 get_or_create_user(connection, email)
 }
@@ -12,10 +12,10 @@ get_or_create_user(connection, email)
 \item{email}{Character string with the email address to be used for the user.}
 }
 \value{
-A \link[tibble:tibble-package]{tibble} listing all available instances including its UID, name, the date then the instance was first created, its description, as well as the number of runs on that instance and the date of the latest run on that instance.
+The \code{UID} of the (newly created or found) user (as integer). If a user is created, a text will be shown with the generated password.
 }
 \description{
-Get a tibble of all available instances
+Based on a given ScrapeBot user's email address, get this user's \code{UID} (or create it first)
 }
 \examples{
 \dontrun{

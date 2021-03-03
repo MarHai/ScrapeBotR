@@ -51,15 +51,25 @@ get_recipe_steps <- function(connection, recipe_uid, include_inactive = FALSE) {
       dplyr::mutate(
         use_random_item = as.logical(use_random_item),
         use_data_item = as.logical(use_data_item),
-        active = as.logical(active)
+        active = as.logical(active),
+        random_items = vector(mode = 'list', length = dplyr::n())
       )
-    random_items <- as.list(rep(NA_character_, nrow(steps)))
+
     # add random items
-    for(step_uid in (steps %>% dplyr::filter(use_random_item) %>% dplyr::pull(uid))) {
-      query <- paste0('SELECT a.value FROM recipestepitem a WHERE a.step_uid = ', step_uid, ' ORDER BY a.value ASC')
-      random_items[[which(steps$uid == step_uid)]] <- DBI::dbGetQuery(connection$db, query)$value
+    if(nrow(steps) > 0) {
+      for(i in 1:nrow(steps)) {
+        if(steps[[i, 'use_random_item']]) {
+          query <- paste0('SELECT a.value FROM recipestepitem a ',
+                          'WHERE a.step_uid = ', steps[[i, 'uid']],
+                          ' ORDER BY a.value ASC')
+          random_items <- DBI::dbGetQuery(connection$db, query)$value
+          if(length(random_items) > 0) {
+            steps[[i, 'random_items']] <- list(random_items)
+          }
+        }
+      }
     }
-    steps$random_items <- random_items
+
     return(steps)
   }, error = function(e) {
     warning(paste0('Collecting recipe steps resulted in an ', e))

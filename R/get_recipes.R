@@ -34,7 +34,8 @@ get_recipes <- function(connection, instance_uid = NULL, include_inactive = FALS
   # Collect recipes
   tryCatch({
     query <- paste0(
-      'SELECT a.uid, a.name, a.created, a.description, a.active, COUNT(b.uid) AS runs_count, MAX(b.created) AS runs_latest ',
+      'SELECT a.uid, a.name, a.created, a.description, a.active, a.cookies, a.interval, ',
+      'COUNT(b.uid) AS runs_count, MAX(b.created) AS runs_latest ',
       'FROM recipe a ',
       'LEFT JOIN run b ON (b.recipe_uid = a.uid) ',
       ifelse(include_inactive, '', 'WHERE a.active '),
@@ -46,7 +47,9 @@ get_recipes <- function(connection, instance_uid = NULL, include_inactive = FALS
       tibble::as_tibble() %>%
       dplyr::mutate(
         runs_count = as.integer(runs_count),
-        active = as.logical(active)
+        active = as.logical(active),
+        cookies = as.logical(cookies),
+        interval = as.integer(interval)
       )
 
     if(!is.null(instance_uid)) {
@@ -72,6 +75,8 @@ get_recipes <- function(connection, instance_uid = NULL, include_inactive = FALS
       created = as.POSIXct(character()),
       description = character(),
       active = logical(),
+      cookies = logical(),
+      interval = integer(),
       runs_count = integer(),
       runs_latest = as.POSIXct(character())
     ))

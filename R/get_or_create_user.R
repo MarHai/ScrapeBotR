@@ -1,9 +1,9 @@
-#' Get a tibble of all available instances
+#' Based on a given ScrapeBot user's email address, get this user's `UID` (or create it first)
 #'
 #' @param connection A ScrapeBot connection object, as retrieved from [connect_scrapebot()].
 #' @param email Character string with the email address to be used for the user.
 #'
-#' @return A [tibble][tibble::tibble-package] listing all available instances including its UID, name, the date then the instance was first created, its description, as well as the number of runs on that instance and the date of the latest run on that instance.
+#' @return The `UID` of the (newly created or found) user (as integer). If a user is created, a text will be shown with the generated password.
 #'
 #' @examples
 #' \dontrun{
@@ -31,15 +31,14 @@ get_or_create_user <- function(connection, email) {
   # if not available, create the user, warn with the password and return their UID
   uid_tibble <-
     DBI::dbGetQuery(connection$db,
-                    paste0('SELECT uid FROM `user` WHERE `email` = "',
-                           stringr::str_replace_all(email,
-                                                    stringr::fixed('"'),
-                                                    '\\"'),
-                           '" AND active LIMIT 1')) %>%
+                    paste0('SELECT uid FROM `user` WHERE `email` = ',
+                           DBI::dbQuoteString(connection$db,
+                                              email),
+                           ' AND active LIMIT 1')) %>%
     tibble::as_tibble()
 
   if (nrow(uid_tibble) == 1) {
-    return(uid_tibble[[1, 'uid']])
+    return(as.integer(uid_tibble[[1, 'uid']]))
   } else {
     password <- paste0(sample(c(sample(letters, 8, T),
                                 sample(LETTERS, 8, T),

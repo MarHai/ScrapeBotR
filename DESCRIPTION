@@ -1,7 +1,7 @@
 Package: ScrapeBotR
 Type: Package
 Title: Orchestrate Instances and Retrieve Data from a ScrapeBot Database
-Version: 0.5.0
+Version: 0.6.0
 Authors@R:
     person(given = 'Mario', 
            family = 'Haim', 
@@ -19,6 +19,7 @@ Imports:
     configr, 
     DBI,
     dplyr,
+    jsonlite,
     magick,
     magrittr,
     openssl,

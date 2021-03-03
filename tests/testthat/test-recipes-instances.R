@@ -21,7 +21,7 @@ test_that('can you get recipes and recipe steps', {
   recipes <- get_recipes(connection, include_inactive = TRUE)
   expect_s3_class(recipes, 'tbl_df')
   expect_equal(colnames(recipes),
-               c('uid', 'name', 'created', 'description', 'active', 'runs_count', 'runs_latest'))
+               c('uid', 'name', 'created', 'description', 'active', 'cookies', 'interval', 'runs_count', 'runs_latest'))
   expect_gt(nrow(recipes), 0)
 
   recipe_uid <-

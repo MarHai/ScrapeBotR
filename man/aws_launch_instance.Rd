@@ -19,7 +19,7 @@ aws_launch_instance(
 \arguments{
 \item{aws_connection}{AWS connection object, as retrieved from \code{\link[=connect_aws]{connect_aws()}}. This also specifies the region.}
 
-\item{instance_owner}{The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a warning will be raised).}
+\item{instance_owner}{The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a text will be raised).}
 
 \item{scrapebot_credential_section}{The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by \code{\link[=aws_launch_database]{aws_launch_database()}} into the aws_connection object.}
 
