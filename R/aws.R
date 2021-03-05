@@ -1,3 +1,49 @@
+#' Get a default image name for a given region
+#'
+#' AWS works in regions. And just like instances, also Amazon Machine Images are customized per region (e.g., timezone, language ...).
+#' This function serves as helping dictionary in that it provides you with the AMI image name for a given image.
+#' The image returned here is the one for an Ubuntu Server 20.04 LTS with SSD volume (64-bit x86, if available).
+#' This has proven to work well with both AWS and ScrapeBot.
+#' It is also eligible for the free tier.
+#'
+#' @param region The AWS region to fetch the image name for (e.g., "eu-central-1" for Frankfurt/Europe) as character.
+#'
+#' @return AWS Amazon Machine Image (AMI) name as character string or (character) \code{NA} if region unknown.
+#'
+#' @examples
+#'
+#' aws_default_ec2_image()
+#' aws_default_ec2_image('eu-central-1')
+#'
+#' @seealso [connect_aws()], [aws_launch_instance()]
+#' @export
+
+aws_default_ec2_image <- function(region = 'eu-central-1') {
+  return(dplyr::case_when(region == 'af-south-1' ~ 'ami-0081edcfb10f9f0d6',
+                          region == 'ap-east-1' ~ 'ami-0774445f9e6290ccd',
+                          region == 'ap-northeast-1' ~ 'ami-059b6d3840b03d6dd',
+                          region == 'ap-northeast-2' ~ 'ami-00f1068284b9eca92',
+                          region == 'ap-northeast-3' ~ 'ami-01ecbd21b1e9b987f',
+                          region == 'ap-south-1' ~ 'ami-0d758c1134823146a',
+                          region == 'ap-southeast-1' ~ 'ami-01581ffba3821cdf3',
+                          region == 'ap-southeast-2' ~ 'ami-0a43280cfb87ffdba',
+                          region == 'ca-central-1' ~ 'ami-043e33039f1a50a56',
+                          region == 'eu-central-1' ~ 'ami-0767046d1677be5a0',
+                          region == 'eu-north-1' ~ 'ami-0ed17ff3d78e74700',
+                          region == 'eu-south-1' ~ 'ami-08a7e27b95390cc06',
+                          region == 'eu-west-1' ~ 'ami-08bac620dc84221eb',
+                          region == 'eu-west-2' ~ 'ami-096cb92bb3580c759',
+                          region == 'eu-west-3' ~ 'ami-0d6aecf0f0425f42a',
+                          region == 'me-south-1' ~ 'ami-07d42d0c2a45aa449',
+                          region == 'sa-east-1' ~ 'ami-0b9517e2052e8be7a',
+                          region == 'us-east-1' ~ 'ami-042e8287309f5df03',
+                          region == 'us-east-2' ~ 'ami-08962a4068733a2b6',
+                          region == 'us-west-1' ~ 'ami-031b673f443c2172c',
+                          region == 'us-west-2' ~ 'ami-0ca5c3bd5a268e7db',
+                          T ~ NA_character_))
+}
+
+
 #' Launch a new ScrapeBot instance as AWS EC2 instance
 #'
 #' Note that this could cause costs, depending on your free tier and the chosen ec2_type.
@@ -18,7 +64,7 @@
 #'
 #' As this function is aimed at minimizing efforts in setting up a ScrapeBot instance, not all details as available within AWS can be modified here. Specify, however:
 #' - The type of server machine you want to run. \code{t2.micro}, the default, qualifies for AWS' cost-free option. Requirements vary with what you intend to do with your ScrapeBot instance.
-#' - The Amazon Machine Image (AMI) or operating system you want to run. The default refers to an Ubuntu Server 20.04 LTS but AWS changes these IDs from time to time.
+#' - The Amazon Machine Image (AMI) or operating system you want to run. The default is to ask the [aws_default_ec2_image()] function.
 #' - The user agent string, an identifying header sent with a web request to help the website identify what system it is interacting with
 #' - The browser language which nudges various websites to change their layout/language
 #' - The browser width and height, which helps to emulate also mobile devices (together with the user agent string)
@@ -32,7 +78,7 @@
 #' @param instance_owner The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a text will be raised).
 #' @param scrapebot_credential_section The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by [aws_launch_database()] into the aws_connection object.
 #' @param ec2_type AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.
-#' @param ec2_image AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
+#' @param ec2_image AWS Amazon Machine Image (AMI) to use. Default is \code{NA} which translates to using a region's default image via [aws_default_ec2_image()].
 #' @param ec2_image_username The username to log into the respective \code{ec2_image}. for Ubuntu images on AWS, this is \code{ubuntu}.
 #' @param browser_useragent The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.
 #' @param browser_language Language to which emulated browser is set. Default is German German. Will be deployed into ScrapeBot config file.
@@ -54,7 +100,7 @@
 #' aws_launch_instance(aws_connection, scrapebot_connection, 'mario@haim.it', ec_type = 't3.large')
 #' }
 #'
-#' @seealso [connect_aws()], [get_or_create_user()], [aws_terminate_instance()]
+#' @seealso [connect_aws()], [aws_default_ec2_image()], [get_or_create_user()], [aws_terminate_instance()]
 #' @importFrom magrittr %>%
 #' @export
 
@@ -62,7 +108,7 @@ aws_launch_instance <- function(aws_connection,
                                 instance_owner,
                                 scrapebot_credential_section = aws_connection$rds_credential_section,
                                 ec2_type = 't2.micro',
-                                ec2_image = 'ami-0767046d1677be5a0',
+                                ec2_image = NA_character_,
                                 ec2_image_username = 'ubuntu',
                                 browser_useragent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
                                 browser_language = 'de-de',
@@ -77,6 +123,9 @@ aws_launch_instance <- function(aws_connection,
   }
   if(!is.character(instance_owner)) {
     stop('A new ScrapeBot instance requires an owner, provided as email address character string in instance_owner.')
+  }
+  if(is.na(ec2_image)) {
+    ec2_image <- aws_default_ec2_image(aws_connection$region)
   }
   if(file.access(aws_connection$ssh_private_file,
                  mode = 4) < 0) {
