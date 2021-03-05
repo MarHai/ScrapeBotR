@@ -33,7 +33,7 @@
 #' @param scrapebot_credential_section The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by [aws_launch_database()] into the aws_connection object.
 #' @param ec2_type AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.
 #' @param ec2_image AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
-#' @param ec2_image_username The username to log into the respective \code{ec2_image}; for Ubuntu images on AWS, this is \code{ubuntu}.
+#' @param ec2_image_username The username to log into the respective \code{ec2_image}. for Ubuntu images on AWS, this is \code{ubuntu}.
 #' @param browser_useragent The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.
 #' @param browser_language Language to which emulated browser is set. Default is German German. Will be deployed into ScrapeBot config file.
 #' @param browser_width Width of the emulated browser in pixels. Default is a recent desktop monitor size. Will be deployed into ScrapeBot config file.
@@ -58,18 +58,16 @@
 #' @importFrom magrittr %>%
 #' @export
 
-aws_launch_instance <- function(
-  aws_connection,
-  instance_owner,
-  scrapebot_credential_section = aws_connection$rds_credential_section,
-  ec2_type = 't2.micro',
-  ec2_image = 'ami-0767046d1677be5a0',
-  ec2_image_username = 'ubuntu',
-  browser_useragent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
-  browser_language = 'de-de',
-  browser_width = 1920,
-  browser_height = 1080) {
-
+aws_launch_instance <- function(aws_connection,
+                                instance_owner,
+                                scrapebot_credential_section = aws_connection$rds_credential_section,
+                                ec2_type = 't2.micro',
+                                ec2_image = 'ami-0767046d1677be5a0',
+                                ec2_image_username = 'ubuntu',
+                                browser_useragent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
+                                browser_language = 'de-de',
+                                browser_width = 1920,
+                                browser_height = 1080) {
   # Test input
   if(is.null(aws_connection$ec2)) {
     stop('AWS connection needs to be set up with EC2, initiated through ScrapeBotR::connect_aws.')
