@@ -28,9 +28,9 @@ export_sbj <- function(connection, recipe_uid, sbj_file = NULL) {
     stop('Connection needs to be a valid connection object, initiated through ScrapeBotR::connect_scrapebot.')
   }
   if(!is.null(sbj_file)) {
-    if(file.access(sbj_file,
-                   mode = 2) < 0) {
-      warning('Provided SBJ file path not NULL but not writable either. Will return SBJ instead.')
+    if(file.access(sbj_file, mode = 2) < 0 &
+       file.access(sbj_file, mode = 0) == 0) {
+      warning('Provided SBJ file path not NULL; file exists but is not writable. Will return SBJ instead.')
       sbj_file <- NULL
     }
   }
