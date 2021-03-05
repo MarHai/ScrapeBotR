@@ -29,7 +29,7 @@ aws_launch_instance(
 
 \item{ec2_image}{AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.}
 
-\item{ec2_image_username}{The username to log into the respective \code{ec2_image}; for Ubuntu images on AWS, this is \code{ubuntu}.}
+\item{ec2_image_username}{The username to log into the respective \code{ec2_image}. for Ubuntu images on AWS, this is \code{ubuntu}.}
 
 \item{browser_useragent}{The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.}
 

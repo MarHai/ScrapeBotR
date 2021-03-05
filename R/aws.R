@@ -33,7 +33,7 @@
 #' @param scrapebot_credential_section The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by [aws_launch_database()] into the aws_connection object.
 #' @param ec2_type AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.
 #' @param ec2_image AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
-#' @param ec2_image_username The username to log into the respective \code{ec2_image}; for Ubuntu images on AWS, this is \code{ubuntu}.
+#' @param ec2_image_username The username to log into the respective \code{ec2_image}. for Ubuntu images on AWS, this is \code{ubuntu}.
 #' @param browser_useragent The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.
 #' @param browser_language Language to which emulated browser is set. Default is German German. Will be deployed into ScrapeBot config file.
 #' @param browser_width Width of the emulated browser in pixels. Default is a recent desktop monitor size. Will be deployed into ScrapeBot config file.
