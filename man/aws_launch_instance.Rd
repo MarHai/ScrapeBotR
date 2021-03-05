@@ -9,6 +9,8 @@ aws_launch_instance(
   instance_owner,
   scrapebot_credential_section = aws_connection$rds_credential_section,
   ec2_type = "t2.micro",
+  ec2_image = "ami-0767046d1677be5a0",
+  ec2_image_username = "ubuntu",
  
     browser_useragent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0",
   browser_language = "de-de",
@@ -24,6 +26,10 @@ aws_launch_instance(
 \item{scrapebot_credential_section}{The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by \code{\link[=aws_launch_database]{aws_launch_database()}} into the aws_connection object.}
 
 \item{ec2_type}{AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.}
+
+\item{ec2_image}{AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.}
+
+\item{ec2_image_username}{The username to log into the respective \code{ec2_image}; for Ubuntu images on AWS, this is \code{ubuntu}.}
 
 \item{browser_useragent}{The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.}
 
@@ -63,6 +69,7 @@ This function follows the suggested ScrapeBot behavior in doing six things:
 As this function is aimed at minimizing efforts in setting up a ScrapeBot instance, not all details as available within AWS can be modified here. Specify, however:
 \itemize{
 \item The type of server machine you want to run. \code{t2.micro}, the default, qualifies for AWS' cost-free option. Requirements vary with what you intend to do with your ScrapeBot instance.
+\item The Amazon Machine Image (AMI) or operating system you want to run. The default refers to an Ubuntu Server 20.04 LTS but AWS changes these IDs from time to time.
 \item The user agent string, an identifying header sent with a web request to help the website identify what system it is interacting with
 \item The browser language which nudges various websites to change their layout/language
 \item The browser width and height, which helps to emulate also mobile devices (together with the user agent string)
@@ -71,7 +78,6 @@ As this function is aimed at minimizing efforts in setting up a ScrapeBot instan
 
 This function then automatically chooses the following settings:
 \itemize{
-\item The Amazon Machine Image (AMI) is chosen as \code{ami-0932440befd74cdba}, an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
 \item A security group is either created or re-used, allowing incoming SSH traffic (TCP via port 22) from anywhere.
 \item firefox is chosen as the package/browser of choice, emulated through xvfb (as suggested by ScrapeBot).
 }

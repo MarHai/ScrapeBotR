@@ -18,13 +18,13 @@
 #'
 #' As this function is aimed at minimizing efforts in setting up a ScrapeBot instance, not all details as available within AWS can be modified here. Specify, however:
 #' - The type of server machine you want to run. \code{t2.micro}, the default, qualifies for AWS' cost-free option. Requirements vary with what you intend to do with your ScrapeBot instance.
+#' - The Amazon Machine Image (AMI) or operating system you want to run. The default refers to an Ubuntu Server 20.04 LTS but AWS changes these IDs from time to time.
 #' - The user agent string, an identifying header sent with a web request to help the website identify what system it is interacting with
 #' - The browser language which nudges various websites to change their layout/language
 #' - The browser width and height, which helps to emulate also mobile devices (together with the user agent string)
 #' - The email address of the ScrapeBot user (for the web frontend) to be associated with the new instance
 #'
 #' This function then automatically chooses the following settings:
-#' - The Amazon Machine Image (AMI) is chosen as \code{ami-0932440befd74cdba}, an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
 #' - A security group is either created or re-used, allowing incoming SSH traffic (TCP via port 22) from anywhere.
 #' - firefox is chosen as the package/browser of choice, emulated through xvfb (as suggested by ScrapeBot).
 #'
@@ -32,6 +32,8 @@
 #' @param instance_owner The email address of the ScrapeBot user who will be the owner of the new instance as character string. If this one does not exist, it will be created (in this case, a text will be raised).
 #' @param scrapebot_credential_section The section within your INI file holding the credentials to the ScrapeBot central database as character string. Default is to use the one set by [aws_launch_database()] into the aws_connection object.
 #' @param ec2_type AWS instance type. The default, \code{t2.micro}, qualifies for the free tier. Variuos \code{t3} types have also proven useful but are connected with costs.
+#' @param ec2_image AWS Amazon Machine Image (AMI) to use. Default is an Ubuntu Server 20.04 LTS (HVM) with SSD volume and 64bit (x86) system. This has proven to work well with both AWS and ScrapeBot. It is also eligible for the free tier.
+#' @param ec2_image_username The username to log into the respective \code{ec2_image}; for Ubuntu images on AWS, this is \code{ubuntu}.
 #' @param browser_useragent The emulated browser's user agent to send to requested websites. Default is a recent Firefox Desktop used under Ubuntu Linux. Will be deployed into ScrapeBot config file.
 #' @param browser_language Language to which emulated browser is set. Default is German German. Will be deployed into ScrapeBot config file.
 #' @param browser_width Width of the emulated browser in pixels. Default is a recent desktop monitor size. Will be deployed into ScrapeBot config file.
@@ -56,14 +58,17 @@
 #' @importFrom magrittr %>%
 #' @export
 
-aws_launch_instance <- function(aws_connection,
-                                instance_owner,
-                                scrapebot_credential_section = aws_connection$rds_credential_section,
-                                ec2_type = 't2.micro',
-                                browser_useragent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
-                                browser_language = 'de-de',
-                                browser_width = 1920,
-                                browser_height = 1080) {
+aws_launch_instance <- function(
+  aws_connection,
+  instance_owner,
+  scrapebot_credential_section = aws_connection$rds_credential_section,
+  ec2_type = 't2.micro',
+  ec2_image = 'ami-0767046d1677be5a0',
+  ec2_image_username = 'ubuntu',
+  browser_useragent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
+  browser_language = 'de-de',
+  browser_width = 1920,
+  browser_height = 1080) {
 
   # Test input
   if(is.null(aws_connection$ec2)) {
@@ -79,10 +84,6 @@ aws_launch_instance <- function(aws_connection,
                  mode = 4) < 0) {
     stop('SSH private key file not readable.')
   }
-
-  # EC2 settings
-  ec2_image <- 'ami-0932440befd74cdba'
-  ec2_image_username <- 'ubuntu'
 
   # create security group (if necessary)
   instance_security_group_name <- 'ScrapeBotR'
